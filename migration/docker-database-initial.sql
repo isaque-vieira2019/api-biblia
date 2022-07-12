@@ -1,0 +1,1 @@
+-- no momento estou inicializando o banco atraves do GORM 
