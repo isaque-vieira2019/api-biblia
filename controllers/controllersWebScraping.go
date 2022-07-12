@@ -1,40 +1,67 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
+	"github.com/isaque-vieira2019/api-biblia/database"
+	"github.com/isaque-vieira2019/api-biblia/models"
 )
 
 func StartWebScraping(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"mensage": "Iniciando Web Scraping",
-	})
+	var biblias []models.Biblia
+	database.DB.Find(&biblias)
+	for _, biblia := range biblias {
+		setLivrosFromWeb(biblia.Url_Biblia)
+	}
 }
 
-func setLivrosFromWeb(url string) {
+type livroWeb struct {
+	livroNome     string
+	endPoint      string
+	qnt_capitulos int
+}
 
-	var livro []string
-	var endpoint []string
+type livrosWeb struct {
+	livroWeb []livroWeb
+}
+
+func (lsw *livrosWeb) AddLivro(livro livroWeb) {
+	lsw.livroWeb = append(lsw.livroWeb, livro)
+}
+func setLivrosFromWeb(url string) {
+	lsw := livrosWeb{}
 
 	doc := requestBody(url)
-
 	doc.Find(".group-books-links div li ul li").Each(func(i int, s *goquery.Selection) {
+		var livroWeb livroWeb
+		livroWeb.livroNome = s.Find("a").Text()
 		temp, _ := s.Find("a").Attr("href")
-		endpoint = append(endpoint, temp)
-		livro = append(livro, s.Find("a").Text())
+		livroWeb.endPoint = temp
+		livroWeb.qnt_capitulos = getCapitulosFromWeb(temp)
+
+		lsw.AddLivro(livroWeb)
+
 	})
+
+	for _, livro_web := range lsw.livroWeb {
+		var livro models.Livro
+		livro.Nome = livro_web.livroNome
+		livro.Qnt_Capitulo = livro_web.qnt_capitulos
+		livro.Fk_id_biblia = 1
+
+		database.DB.Create(&livro)
+	}
 }
 
-func setCapitulosFromWeb(livro string) {
+func getCapitulosFromWeb(livro string) int {
 	url := livro
 	doc := requestBody(url)
 	quantidade := len(doc.Find(".list-capitulos").Children().Nodes)
-	fmt.Println(quantidade)
+	return quantidade
 }
 
 func setVersiculosFromWeb(livro string, capitulo int) {
