@@ -1,8 +1,10 @@
 package models
 
+import "gorm.io/gorm"
+
 type Capitulo struct {
-	Id              int
-	N_Capitulo      string
-	fk_id_livro     int
-	fk_id_versiculo int
+	gorm.Model
+	N_Capitulo  string
+	Fk_id_livro int
+	Livro       Livro `gorm:"foreignKey:Fk_id_livro"`
 }

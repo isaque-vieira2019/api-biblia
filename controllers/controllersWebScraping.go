@@ -11,6 +11,9 @@ import (
 )
 
 func StartWebScraping(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"mensage": "Iniciando Web Scraping",
+	})
 }
 
 func setLivrosFromWeb(url string) {

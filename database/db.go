@@ -19,5 +19,10 @@ func ConectaComBancoDeDados() {
 	if err != nil {
 		log.Panic("Erro ao conectar com banco de dados")
 	}
-	DB.AutoMigrate(&models.Biblia{}, &models.Livro{}, &models.Versiculo{}, &models.Capitulo{})
+	err := DB.AutoMigrate(&models.Biblia{}, &models.Livro{}, &models.Versiculo{}, &models.Capitulo{})
+
+	if err != nil {
+		panic("Erro ao Criar as Tabelas")
+	}
+
 }
