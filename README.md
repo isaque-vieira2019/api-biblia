@@ -8,7 +8,7 @@
 
 <p>Agradecimentos Especiais:
 <ol>
-  <li><b>Deus<b>, por me dar conhecimento suficiente para criar a API</li>
+  <li><b>Deus</b>, por me dar conhecimento suficiente para criar a API</li>
   <li>Minha Noiva por me incentivar a fazer a API</li>
   <li>Ao meu líder por despertar esta vontade em mim</li>
   <li>Ao site https://bibliaestudos.com/ pois de lá que extrai os dados, vale a pena entrar o site e bem completo</li>
