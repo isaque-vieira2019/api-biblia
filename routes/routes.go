@@ -8,7 +8,7 @@ import (
 func HandleRequest() {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
-	r.GET("/webScraping/", controllers.StartWebScraping)
+	//r.GET("/webScraping/", controllers.StartWebScraping) rota desativada por enquanto
 	r.GET("/", controllers.ExibePaginaIndex)
 	r.Run(":8000")
 }

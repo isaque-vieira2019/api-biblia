@@ -19,41 +19,30 @@ func StartWebScraping(c *gin.Context) {
 	}
 }
 
-type livroWeb struct {
-	livroNome     string
-	endPoint      string
-	qnt_capitulos int
-}
-
-type livrosWeb struct {
-	livroWeb []livroWeb
-}
-
-func (lsw *livrosWeb) AddLivro(livro livroWeb) {
-	lsw.livroWeb = append(lsw.livroWeb, livro)
-}
 func setLivrosFromWeb(url string) {
-	lsw := livrosWeb{}
+	lsw := models.LivrosWeb{}
 
 	doc := requestBody(url)
 	doc.Find(".group-books-links div li ul li").Each(func(i int, s *goquery.Selection) {
-		var livroWeb livroWeb
-		livroWeb.livroNome = s.Find("a").Text()
+		var livroWeb models.LivroWeb
+		livroWeb.LivroNome = s.Find("a").Text()
 		temp, _ := s.Find("a").Attr("href")
-		livroWeb.endPoint = temp
-		livroWeb.qnt_capitulos = getCapitulosFromWeb(temp)
+		livroWeb.EndPoint = temp
+		livroWeb.Qnt_capitulos = getCapitulosFromWeb(temp)
 
 		lsw.AddLivro(livroWeb)
 
 	})
 
-	for _, livro_web := range lsw.livroWeb {
+	for _, livro_web := range lsw.LivroWeb {
 		var livro models.Livro
-		livro.Nome = livro_web.livroNome
-		livro.Qnt_Capitulo = livro_web.qnt_capitulos
+		livro.Nome = livro_web.LivroNome
+		livro.Qnt_Capitulo = livro_web.Qnt_capitulos
 		livro.Fk_id_biblia = 1
 
 		database.DB.Create(&livro)
+
+		setCapitulosFromWeb(livro_web.EndPoint, livro.Qnt_Capitulo, int(livro.ID))
 	}
 }
 
@@ -64,13 +53,29 @@ func getCapitulosFromWeb(livro string) int {
 	return quantidade
 }
 
-func setVersiculosFromWeb(livro string, capitulo int) {
-	url := livro + strconv.Itoa(capitulo)
+func setCapitulosFromWeb(url string, qnt int, id_livro int) {
+	for i := 1; i <= qnt; i++ {
+		var capitulo models.Capitulo
+		capitulo.N_Capitulo = i
+		capitulo.Fk_id_livro = id_livro
+
+		database.DB.Create(&capitulo)
+
+		setVersiculosFromWeb(url, capitulo)
+	}
+}
+
+func setVersiculosFromWeb(livro string, cap models.Capitulo) {
+	url := livro + strconv.Itoa(cap.N_Capitulo)
 	doc := requestBody(url)
 
-	var versiculo []string
 	doc.Find("#mvp-content-main p").Each(func(i int, s *goquery.Selection) {
-		versiculo = append(versiculo, s.Text())
+		var versiculo models.Versiculo
+		versiculo.N_Versiculo = i + 1
+		versiculo.Conteudo = s.Text()
+		versiculo.Fk_id_capitulo = cap.N_Capitulo
+
+		database.DB.Create(&versiculo)
 	})
 
 }
