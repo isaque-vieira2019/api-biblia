@@ -73,7 +73,7 @@ func setVersiculosFromWeb(livro string, cap models.Capitulo) {
 		var versiculo models.Versiculo
 		versiculo.N_Versiculo = i + 1
 		versiculo.Conteudo = s.Text()
-		versiculo.Fk_id_capitulo = cap.N_Capitulo
+		versiculo.Fk_id_capitulo = int(cap.ID)
 
 		database.DB.Create(&versiculo)
 	})
