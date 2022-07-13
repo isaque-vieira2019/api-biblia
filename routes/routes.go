@@ -10,5 +10,8 @@ func HandleRequest() {
 	r.LoadHTMLGlob("templates/*")
 	//r.GET("/webScraping/", controllers.StartWebScraping) rota desativada por enquanto
 	r.GET("/", controllers.ExibePaginaIndex)
+	r.GET("/:biblia/livros", controllers.ListarLivros)
+	r.GET("/:biblia/livros/:livro/:capitulo", controllers.ListarCapituloInteiro)
+	r.GET("/:biblia/livros/:livro/:capitulo/:versiculo", controllers.ListarUmVersiculo)
 	r.Run(":8000")
 }
