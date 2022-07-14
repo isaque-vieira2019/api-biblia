@@ -11,7 +11,8 @@ func HandleRequest() {
 	//r.GET("/webScraping/", controllers.StartWebScraping)
 	r.GET("/", controllers.ExibePaginaIndex)
 	r.GET("/:biblia/livros", controllers.ListarLivros)
-	r.GET("/:biblia/livros/:livro/:capitulo", controllers.ListarCapituloInteiro)
-	r.GET("/:biblia/livros/:livro/:capitulo/:versiculo", controllers.ListarUmVersiculo)
+	r.GET("/:biblia/livros/:livro/capitulos/:capitulo", controllers.ListarCapituloInteiro)
+	r.GET("/:biblia/livros/:livro/capitulos/:capitulo/versiculos/:versiculo", controllers.ListarUmVersiculo)
+	r.GET("/:biblia/livros/:livro/capitulos/:capitulo/versiculos/:versiculo/:versiculoEnd", controllers.ListarIntervaloVersiculo)
 	r.Run(":8000")
 }
