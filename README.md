@@ -6,7 +6,25 @@
 
 <p>Está Api ainda está em desenvolvimento, meu objetivo e ter as versões mais conhecidas da <i><b>Biblia</b></i> e em diferentes idiomas, onde você conseguirar fazer requisições rapidas para ter o conteúdo</p>
 
-<p>Agradecimentos Especiais:
+
+<h3>Rotas e suas funcionalidades</h3>
+
+
+<h4><i>1°. Pegar todos os livros da biblia</i></h4>
+<p>http://localhost:8000/:biblia/livros</p><br>
+<h4><i>2°. Pegar um capitulo completo</i></h4>
+<p>http://localhost:8000/:biblia/livros/:siglaLivro/capitulos/:capNumero</p><br>
+<h4><i>3°. Pegar todos os livros da biblia</i></h4>
+<p>http://localhost:8000/:biblia/livros/:siglaLivro/capitulos/:capNumero/versiculos/:versNumero</p><br>
+<h4><i>4°. Pegar todos os livros da biblia</i></h4>
+<p>http://localhost:8000/:biblia/livros/:siglaLivro/capitulos/:capNumero/versiculos/:versNumero/:versNumeroEnd</p><br>
+
+
+
+
+
+
+<h3>Agradecimentos Especiais:</h3>
 <ol>
   <li><b>Deus</b>, por me dar conhecimento suficiente para criar a API</li>
   <li>Minha Noiva por me incentivar a fazer a API</li>
