@@ -9,3 +9,8 @@ type Versiculo struct {
 	Fk_id_capitulo int
 	Capitulo       Capitulo `gorm:"foreignKey:Fk_id_capitulo"`
 }
+
+type VersiculosApi struct {
+	N_versiculo int
+	Conteudo    string
+}

@@ -9,3 +9,8 @@ type Livro struct {
 	Fk_id_biblia int
 	Biblia       Biblia `gorm:"foreignKey:Fk_id_biblia"`
 }
+
+type LivrosApi struct {
+	Nome         string
+	Qnt_Capitulo int
+}
