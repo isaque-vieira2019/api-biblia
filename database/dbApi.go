@@ -22,13 +22,16 @@ func ListarCapituloInteiroDB(sigla, capNumero string) []models.VersiculosApi {
 	return versiculos
 }
 
-func ListarUmVersiculoDB(sigla, capNumero, versNumero string) string {
-	var versiculo string
-	stmt := "SELECT vs.conteudo FROM sigla_livros sl INNER JOIN livros l on sl.fk_id_livro = l.id"
+func ListarUmVersiculoDB(sigla, capNumero, versNumero string) models.VersiculosApi {
+	var id_versiculo int
+	stmt := "SELECT vs.id FROM sigla_livros sl INNER JOIN livros l on sl.fk_id_livro = l.id"
 	stmt += " INNER JOIN capitulos cp on l.id = cp.fk_id_livro"
 	stmt += " INNER JOIN versiculos vs on cp.id = vs.fk_id_capitulo"
 	stmt += " WHERE sl.sigla = ? and cp.n_capitulo = ? and vs.n_versiculo = ?"
-	DB.Raw(stmt, sigla, capNumero, versNumero).Scan(&versiculo)
+	DB.Raw(stmt, sigla, capNumero, versNumero).Scan(&id_versiculo)
+
+	var versiculo models.VersiculosApi
+	DB.Table("versiculos").Where("id", id_versiculo).Select("n_versiculo, conteudo").Order("id").Scan(&versiculo)
 
 	return versiculo
 }
